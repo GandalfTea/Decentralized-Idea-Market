@@ -3,17 +3,17 @@ Blockchain based idea market.
 
 &nbsp;
 
-_Indeed, it is becoming ever more obvious that it is not famine, not earthquakes, not microbes, not cancer but man himself who is man's greatest danger to man, for the simple reason that there is no adequate protection against psychic epidemics, which are infinitely more devastating than the worst of natural catastrophes_
+_Indeed, it is becoming ever more obvious that it is not famine, not earthquakes, not microbes, not cancer but man himself who is man's greatest danger to man, for the simple reason that there is no adequate protection against psychic epidemics, which are infinitely more devastating than the worst of natural catastrophes_       
 Carl Jung
 
 &nbsp;
 
-_Crimes the individual alone could never stand are freely committed by the group_.
+_Crimes the individual alone could never stand are freely committed by the group_.       
 Carl Jung
 
 &nbsp;
 
-_...the totalitarian systems of the 20th century represent a kind of collective psychosis. Weather gradually or suddenly, reason and common human decency are no longer possible in such a system: there is only a pervasive atmosphere of terror, and a projection of "the enemy", imagined to be "in our midst". Thus society turns on itself urged on by the ruling authorities_
+_...the totalitarian systems of the 20th century represent a kind of collective psychosis. Weather gradually or suddenly, reason and common human decency are no longer possible in such a system: there is only a pervasive atmosphere of terror, and a projection of "the enemy", imagined to be "in our midst". Thus society turns on itself urged on by the ruling authorities_        
 Joost Meerloo
 
 &nbsp;

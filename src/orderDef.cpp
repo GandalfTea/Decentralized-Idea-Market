@@ -5,12 +5,16 @@
 //Orders should contain:
 // * Addresss of user
 // * Timestamp
+// 	* Date
+// 	* Time
 // * Security
 // * Price
 // * Quantity
 // * Type: sell of buy
 // * Expiration
-// * Execution type
+// 	* Date
+// 	* Time
+// * Execution type :
 // * Locked money or security
 
 typedef std::map<std::string,std::string> dict;
@@ -21,13 +25,14 @@ struct Flow {
 }
 
 dict createOrder(std::string userAddress,
-		std::string Timestamp,
 		std::string Security,
 		std::string Price,
 		std::string Quantity,
 		std::string Type,
 		std::string Expiration,
 		std::string Execution) {
+
+	Timestapm = "Automatic time allocation.";
 
 	//create dict of order
 	dict order;
@@ -47,7 +52,7 @@ dict createOrder(std::string userAddress,
 }
 
 int main(){
-	dict a = createOrder("user001", "12:45:12", "GME", "314.45", 
+	dict a = createOrder("user001", "GME", "314.45", 
 			"3.4", "0","2021-04-05", "Pronto");
 
 	for(auto elem : a) {

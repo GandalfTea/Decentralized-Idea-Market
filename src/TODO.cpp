@@ -7,6 +7,8 @@
 // The price of the transaction becomes the new market price.
 // If large volume, price of most transactions
 
+// SMART CONTRACTS
+
 //Decentralyzed blockchain stock market:
 
 // Agreaments are done by Smart Contracts
@@ -20,6 +22,24 @@
 // * marketPrice - price of last executed action
 // * bids - sorted array of all unexecuted sells
 // * asks - sorted array of all unexecuted orders
+
+//CONSENSUS
+
+//Before the block is implemented on the chain, every node in a network needs to agree to it's validity. This is done through a consensus algorithm. The main ones are:
+// * Proof of Work  - most used
+// * Proof of Stake - most used
+// * Proof of Burn
+// * Delegated Proof of Stake
+// * Proof of Inportance
+
+// Proof of WORK
+// It gives the miners a difficult mathematical challenge and whoever manages to solve it first gets to be the miner. This has a big performance hit.
+
+// Proof of STAKE
+// It relies on validators taking part in voting for the next block. The weight of each validators's vote is dependent on how much it deposited in the system. Nodes who are allowed to create a block act as validators that need to deposit some crypto as a stake in the network that will be locked 
+
+
+// ORDERS
 
 // Each order should contain:
 // * address of actor

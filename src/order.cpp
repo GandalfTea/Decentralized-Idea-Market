@@ -1,6 +1,8 @@
 #include <map>
 #include <vector>
 
+typedef std::map<std::string, std::string> dict;
+
 struct Flow{
 	std::vector<dict> Buy;
 	std::vector<dict> Sell;
@@ -33,14 +35,19 @@ dict createOrder(std::string userAddress,
 		std::string Expiration,
 		std::string Execution) {
 
-	timestampDay = "Automatic time allocation.";
-	timestampHour = "Automatic time allocation.";
+	std::string timestampDay = "Automatic time allocation.";
+	std::string timestampHour = "Automatic time allocation.";
+
+	std::string Timestamp = timestampDay + " " + timestampHour;
+
+	static size_t ID = 1;
+
 
 	//create dict of order
 	dict order;
+	order["ID"] = ID++;
 	order["user"] = userAddress;
-	order["time"] = dict Timestamp {"day" : timestampDay,
-	       				"hour" : timestampHour};
+	order["time"] = Timestamp;
 	order["security"] = Security;
 	order["price"] = Price;
 	order["quantity"] = Quantity;
@@ -63,7 +70,6 @@ dict createOrder(std::string userAddress,
 }
 
 
-int main()
 
 
 // filter order flow so that:

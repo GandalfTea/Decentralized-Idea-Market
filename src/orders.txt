@@ -1,0 +1,27 @@
+ID:
+execution:ASAP
+expiration:26/03
+price:321.45
+quantity:6
+security:GME
+time:Automatic time allocation. Automatic time allocation.
+type:0
+user:00000001
+ID:
+execution:ASAP
+expiration:26/03
+price:321.45
+quantity:6
+security:GME
+time:Automatic time allocation. Automatic time allocation.
+type:0
+user:00000001
+ID:
+execution:ASAP
+expiration:26/03
+price:321.45
+quantity:6
+security:GME
+time:Automatic time allocation. Automatic time allocation.
+type:0
+user:00000001

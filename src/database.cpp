@@ -1,13 +1,14 @@
-
+#include <string>
 #include "database.h"
 #include <fstream>
+#include <iostream>
 
 const double Database::Version = 1.0;
 
 void Database::updateOrders(std::vector<dict> newOrders) {
 
-	ofstream orders;
-	orders.open("orders.txt", ios::in | ios::ate);
+	std::ofstream orders;
+	orders.open("orders.txt", std::ios::in | std::ios::ate);
 
 	for(auto order : newOrders){
 		size_t lineIndex = 1;
@@ -25,53 +26,66 @@ void Database::updateOrders(std::vector<dict> newOrders) {
 
 }
 
-std::vector<dict> Database::retrieveOrders(std::string<dict> alreadyIndexed) {
 
-	ofstream orders;
-	orders.open("orders.txt", ios::out);
+// RETURN : Vector argument, updated.
+std::vector<dict> Database::retrieveOrders(std::vector<dict> alreadyIndexed) {
+
+	std::ifstream orders("orders.txt");
 
 	std::string delimeter = ":";
+	bool inOrder = false;		// keep track of position
+	bool alreadyExists = false;	// if order already indexed
+	dict newOrder;			// order to write and push
 
-	// Check for new transactions
-	while(size_t index = 0; orders.eof() ;index + 10){
+	std::string s;			// write the current string to it
+	size_t a;			
+	
+	while(getline(orders, s)){
+	
+		static size_t index = 0;
 
-		std::string s;
+		if(index % 10 == 0) {
+			
+			inOrder = true;
 
-		// Skip to the ID line
-		for (size_t i = 0, i < index; i++){
-			std::getline(orders, s);	
-		}
-
-		// Get ID line
-		std::getline(orders, s);
-		std::string ID = s.substr(s.find(delimiter)+1);
-
-		// Check if order with ID already is indexed
-		bool alreadyExists = false;
-		for(auto order : alreadyIndexed) {
-			if order["ID"] == ID{
-				alreadyExists = true;
+			// Get ID line and check if already indexed.
+			std::string ID = s.substr(s.find(delimeter)+1);
+			for(auto order : alreadyIndexed) {
+				if(order["ID"] == ID){
+					alreadyExists = true;
+				} else {
+					newOrder["ID"] = ID;
+				}
 			}
 		}
+		
+		// Keep track of index in order to know how many
+		// lines it has to read to get the whole order.
+		if(!inOrder){
+			a = index;
+		}
 
-		// Add unindexed orders
-		if(!alreadyExists){
+		// Read and index order
+		if(inOrder && !alreadyExists){
 			
-			dict newOrder;
-
-			for(size_t i = 0; i < 10; i++){
+			if(index < a+8){
 				
-				newOrder["ID"] = ID;
-				
-				std::getline(orders, s);
 				std::string name = s.substr(0,s.find(delimeter));
 				std::string value = s.substr(s.find(delimeter)+1);
-
 				newOrder[name] = value;
+			
 			}
+			
+			if(index != 0 && index != 1 && index % 8 == 0){
+				
+				alreadyIndexed.push_back(newOrder);
+				newOrder.clear();
 
-			alreadyIndexed.push_back(newOrder);
+				alreadyExists = false;
+				inOrder = false;
+			}
 		}
+		++index;
 	}
 	return alreadyIndexed;
 }

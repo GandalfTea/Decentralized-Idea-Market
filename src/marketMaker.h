@@ -39,7 +39,12 @@ class marketMaker(){
 	private:
 
 		new Flow orderFlow;
+		size_t updateRate;
+
+		bool transactionIntegrity();
+
 		void updatePrice();
+		void updateVolume();
 		void updateOrderFlow();
 }
 

@@ -23,7 +23,6 @@ void Database::updateOrders(std::vector<dict> newOrders) {
 			lineIndex++;
 		}
 	}
-
 }
 
 

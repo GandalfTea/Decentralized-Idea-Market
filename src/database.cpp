@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-const double Database::Version = 1.0;
+const double Database::Version = 0.1;
 
 void Database::updateOrders(std::vector<dict> newOrders) {
 
@@ -27,7 +27,7 @@ void Database::updateOrders(std::vector<dict> newOrders) {
 
 
 // RETURN : Vector argument, updated.
-std::vector<dict> Database::retrieveOrders(std::vector<dict> alreadyIndexed) {
+Flow Database::retrieveOrders() {
 
 	std::ifstream orders("orders.txt");
 
@@ -43,23 +43,36 @@ std::vector<dict> Database::retrieveOrders(std::vector<dict> alreadyIndexed) {
 	
 		static size_t index = 0;
 
+		// Orders are 10 lines long.
 		if(index % 10 == 0) {
 			
 			inOrder = true;
 
 			// Get ID line and check if already indexed.
 			std::string ID = s.substr(s.find(delimeter)+1);
-			for(auto order : alreadyIndexed) {
+			for(auto order : orderFlow.Buy) {
 				if(order["ID"] == ID){
 					alreadyExists = true;
-				} else {
-					newOrder["ID"] = ID;
+					break;
+			}
+			if(!alreadyExists) {
+				for(auto order : orderFlow.Sell) {
+					if(order["ID"] == ID){
+						alreadyExists = true;
+						break;
 				}
 			}
 		}
 		
-		// Keep track of index in order to know how many
-		// lines it has to read to get the whole order.
+		if(alreadyExists){
+			inOrder = false;
+			break;
+		}else{
+			// Push the ID in the new dict
+			newOrder["ID"] = ID;
+		}
+
+		// Freeze index value when in order.
 		if(!inOrder){
 			a = index;
 		}
@@ -71,13 +84,21 @@ std::vector<dict> Database::retrieveOrders(std::vector<dict> alreadyIndexed) {
 				
 				std::string name = s.substr(0,s.find(delimeter));
 				std::string value = s.substr(s.find(delimeter)+1);
+
 				newOrder[name] = value;
-			
 			}
 			
 			if(index != 0 && index != 1 && index % 8 == 0){
 				
-				alreadyIndexed.push_back(newOrder);
+				//Sell
+				if(newOrder["type"] == 0){
+					orderFlow.Sell.push_back(newOrder);
+
+				// Buy		
+				}else if(newOrder["type"] == 1){
+					orderFlow.Buy.push_back(newOrder);
+				}
+
 				newOrder.clear();
 
 				alreadyExists = false;
@@ -86,6 +107,6 @@ std::vector<dict> Database::retrieveOrders(std::vector<dict> alreadyIndexed) {
 		}
 		++index;
 	}
-	return alreadyIndexed;
+	return Database::orderFlow;
 }
 

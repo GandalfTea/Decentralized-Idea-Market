@@ -4,6 +4,11 @@
 
 typedef std::map<std::string, std::string> dict;
 
+struct Flow {
+	std::vector<dict> Buy;
+	std::vector<dict> Sell;
+};
+
 class Database{
 	public:
 		Database() = default;
@@ -11,17 +16,11 @@ class Database{
 		// get latest external orders
 		void updateOrders(std::vector<dict> newOrders);
 		// update external order list
-		std::vector<dict> retrieveOrders(std::vector<dict> alreadyIndexedd);
+		Flow retrieveOrders(std::vector<dict> alreadyIndexed);
 
 	private:
+		Flow orderFlow;
 		const static double Version;	
 
-
-
-
 };
-
-
-
-
 

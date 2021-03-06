@@ -29,6 +29,10 @@
  10. Update volume based on traded shares.
  
 */
+struct pairOrders {
+	const dict& Buy;
+	const dict& Sell;
+};
 
 class marketMaker(){
 
@@ -39,12 +43,14 @@ class marketMaker(){
 	private:
 
 		new Flow orderFlow;
+		std::vector<pairOrders> buffer;
 		size_t updateRate;
 
-		bool transactionIntegrity();
+		bool transactionIntegrity(dict sell, dict buy);
+		void saveTransaction(pairOrders transaction);
 
-		void updatePrice();
-		void updateVolume();
+		void createTransaction(dict sell, dict buy);
+		void updatePriceAndVolume(std::string security);
 		void updateOrderFlow();
 }
 

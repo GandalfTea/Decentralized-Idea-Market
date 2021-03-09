@@ -1,4 +1,4 @@
-## Decentralized Idea Market
+## Decentralized Idea and Prediction Market
 
 
 &nbsp;

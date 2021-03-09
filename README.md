@@ -37,7 +37,7 @@ An open idea market could serve as a collective sanity check for a group of indi
 &nbsp;
 
 
-## Dependencies <a name="dep"></a>
+### Dependencies <a name="dep"></a>
 
 &nbsp;
 

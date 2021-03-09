@@ -11,36 +11,16 @@ struct user {
 	std::map<std::string, double> Stocks;
 };
 
-std::map<std::string, user> allUsers;
 
-{
-	// Example of user
+// Example of user
 
-	user Alex;
-	Alex.Name = "Alex Voldigord";
-	Alex.Address = "AL0001";
-	Alex.Money = 265.89;
-	Alex.Currency = "USD";
+std::map<std::string, double> stocks { {"AAPL", 14.5} };
+std::map<std::string, double> stonks { {"GME",456.3}, {"AAPL", 0.78}};
 
-	std::map<std::string, double> stocks {
-		"AAPL" : 14.5
-	}
-	Alex.Stocks = stocks;
+user Alex {"Alex Voldigord", "AL001", 265.89, "USD", stocks};;
 
-	allUsers[Alex.Address] = Alex;
+user Maria{ "Maria Duhovnicescu DeLaMare", "MA001", 90724587375.5, "USD", stonks};
+
+std::map<std::string,user> allUsers { {"MA001",Maria}, {"AL001",Alex} };
 
 
-	user Maria;
-	Maria.Name = "Maria Duhovnicescu DelaMare";
-	Maria.Address = "MA001";
-	Maria.Money = 9876093.00;
-	Maria.Currency = "RON";
-
-	std::map<std::string, double> stonks {
-		"GME" : 456.3,
-		"AAPL" : 0.78
-	}
-	Maria.Stocks = stonks;
-
-	allUsers[Maria.Address] = Maria;
-}

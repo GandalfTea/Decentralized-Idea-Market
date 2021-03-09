@@ -1,15 +1,17 @@
-#include "./data/users.h"
+#define _WIN32_WINNT 0x0501
 #include "marketMaker.h"
-#include <thread>
+#include <chrono>
+#include "mingw.thread.h"
 
 
 marketMaker::marketMaker(){
 
 
 	while(true){
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 		updateOrderFlow();
 		std::thread searchTransaction();
-		std::thread t2(createTransaction());
+		std::thread createTransaction();
 	}
 }
 
@@ -146,9 +148,9 @@ void marketMaker::updatePriceAndVolume(dict order){
 	// * Update price.
 	// * Update volume.
 	
-	double orderVolume = std::stoi(order["quantity"]);
-	double orderPrice = std::stoi(order["price"]);
-	// Get security.
+	allSecurities[order["security"]].Price = std::stoi(order["quantity"]);
+	allSecurities[order["security"]].dailyVolume += std::stoi(order["price"]);
+
 	return;
 }
 

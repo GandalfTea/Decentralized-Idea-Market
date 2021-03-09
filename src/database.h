@@ -16,7 +16,7 @@ class Database{
 		// get latest external orders
 		void updateOrders(std::vector<dict> newOrders);
 		// update external order list
-		Flow retrieveOrders(std::vector<dict> alreadyIndexed);
+		Flow retrieveOrders();
 
 	private:
 		Flow orderFlow;

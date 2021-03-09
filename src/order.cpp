@@ -45,7 +45,7 @@ dict createOrder(std::string userAddress,
 
 	//create dict of order
 	dict order;
-	order["ID"] = ID++;
+	order["ID"] = to_string(ID++);
 	order["user"] = userAddress;
 	order["time"] = Timestamp;
 	order["security"] = Security;

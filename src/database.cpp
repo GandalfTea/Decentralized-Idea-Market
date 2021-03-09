@@ -107,6 +107,6 @@ Flow Database::retrieveOrders() {
 		}
 		++index;
 	}
-	return Database::orderFlow;
+	return orderFlow;
 }
 

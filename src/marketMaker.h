@@ -1,5 +1,5 @@
 #include "database.h"
-#include "/data/securities.h"
+#include "./data/securities.h"
 
 
 /* 
@@ -29,12 +29,14 @@
  10. Update volume based on traded shares.
  
 */
-struct pairOrders {
-	const dict& Buy;
-	const dict& Sell;
+struct pairOrder {
+	dict Buy;
+	dict Sell;
+	const size_t indexBuy;
+	const size_t indexSell;
 };
 
-class marketMaker(){
+class marketMaker{
 
 	public:
 		// handle transactions
@@ -42,16 +44,18 @@ class marketMaker(){
 	
 	private:
 
-		new Flow orderFlow;
-		std::vector<pairOrders> buffer;
-		size_t updateRate;
+		Database Database;
+		Flow orderFlow;
+		std::vector<pairOrder> buffer;
+		size_t updateRate = 1;
 
+		void searchTransaction();
 		bool transactionIntegrity(dict sell, dict buy);
-		void saveTransaction(pairOrders transaction);
+		void saveTransaction(pairOrder transaction);
 
-		void createTransaction(dict sell, dict buy);
-		void updatePriceAndVolume(std::string security);
+		void createTransaction();
+		void updatePriceAndVolume(dict order);
 		void updateOrderFlow();
-}
+};
 
 

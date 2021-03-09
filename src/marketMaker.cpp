@@ -1,35 +1,31 @@
-#include<marketMaker.h>
+#include "./data/users.h"
+#include "marketMaker.h"
+#include <thread>
 
 
-size_t marketMaker::updateRate = 1;
-
-// Used as a return for the live search of transactions.
-// Allows for parallel running of search and transaction fulfilment.
+marketMaker::marketMaker(){
 
 
-markerMaker::marketMaker(){
-
-	pairOrder searchTransaction(){
-		for(auto ask : orderFlow.Buy){
-			for(auto bid : orderFlow.Sell){
-				if ask["Price"] == bid["Price"]{
-					pairOrders order(ask, bid);
-					buffer.push_back(order);
-				}
-			}	
-		}
-	}
-
-
-	while(True){
-		
+	while(true){
 		updateOrderFlow();
 		std::thread searchTransaction();
-		std::thread createTransaction();
+		std::thread t2(createTransaction());
 	}
 }
 
-void markerMaker::createTransaction(){
+
+void marketMaker::searchTransaction(){
+	for(size_t i = 0; i == orderFlow.Buy.size(); i++){
+		for(size_t j = 0; j == orderFlow.Sell.size(); j ++){
+			if(orderFlow.Buy[i]["Price"] == orderFlow.Sell[j]["Price"]){
+				pairOrder order{orderFlow.Buy[i], orderFlow.Sell[j],i, j};
+				marketMaker::buffer.push_back(order);
+			}
+		}
+	}
+}
+
+void marketMaker::createTransaction(){
 
 	/* 
 	 * Check transaction integrity.
@@ -45,53 +41,92 @@ void markerMaker::createTransaction(){
 		transactionIntegrity(transaction.Sell, transaction.Buy);
 
 		// Remove the orders from orderFlow	
-		dict sell = *transaction.Sell;
-		dict buy = *transaction.Buy;
+		dict& sell = transaction.Sell;
+		dict& buy = transaction.Buy;
 
-		orderFlow.Buy.remove(transaction.Buy);
-		orderFlow.Sell.remove(transaction.Sell);
+		orderFlow.Buy.erase(orderFlow.Buy.begin() + transaction.indexBuy);
+		orderFlow.Sell.erase(orderFlow.Sell.begin() + transaction.indexSell);
 
 
 		// Full Order Fulfillment
 		if (sell["quantity"] == buy["quantity"]){
-			// Complete transaction
-			saveTransaction(transaction);
-
-
-		// Partial Order Fulfillment
-		}else if (sell["quantity"] > buy["quantity"] || sell["quantity"] < buy["quantity"]){
-			
 
 			{
 				//Transfer money and security
-			}
+				double Quantity = std::stoi(sell["quantity"]);
+				double Value = std::stoi(sell["quantity"]) * std::stoi(sell["price"]);
 
+				allUsers[sell["user"]].Stocks[sell["security"]] -= Quantity;
+				allUsers[buy["user"]].Money -= Value;
+				allUsers[buy["user"]].Stocks[buy["security"]] += Quantity;
+				allUsers[sell["user"]].Money += Value;
 
-
-			// In case of partial-completed order, update the order and
-			// push it back in the orderFlow.
-			
-			if(sell["quantity"] > buy["quantity"]){
-				int diff = std::stoi(sell["quantity"]) - std::stoi(buy["quantity"]);
-				sell["quantity"] = to_string(diff);
-				orderFlow.Sell.push_back(sell);
-			}else if(sell["quantity"] < buy["quantity"]) {
-				int diff = std::stoi(buy["quantity"]) - std::stoi(sell["quantity"]);
-				buy["quantity"] = to_string(diff);
-				orderFlow.Buy.push_back(buy);
 			}
 
 			saveTransaction(transaction);
+			updatePriceAndVolume(buy);
+
+			return;
+
+		// Partial Order Fulfillment
+		}else if (std::stoi(sell["quantity"]) > std::stoi(buy["quantity"]) || std::stoi(sell["quantity"]) < std::stoi(buy["quantity"])){
+			
+
+			if(std::stoi(sell["quantity"]) > std::stoi(buy["quantity"])){
+
+				{
+					// Transfer money and security.
+
+					double Quantity = std::stoi(buy["quantity"]);
+					double Price = std::stoi(buy["price"]);
+
+					allUsers[sell["user"]].Stocks[sell["security"]] -= Quantity;
+					allUsers[buy["user"]].Money -= Price;
+					allUsers[buy["user"]].Stocks[buy["security"]] += Quantity;
+					allUsers[sell["user"]].Money += Price;
+				}
+
+				// Push back the order that is partially fulfilled.
+				double Remainder = std::stoi(sell["quantity"]) - std::stoi(buy["quantity"]);
+				sell["quantity"] = std::to_string(Remainder);
+				orderFlow.Sell.push_back(sell);
+
+				updatePriceAndVolume(buy);
+
+			}else if(std::stoi(sell["quantity"]) < std::stoi(buy["quantity"])) {
+				
+				{
+					// Transfer money and security.
+				
+					double Quantity = std::stoi(sell["quantity"]);
+					double Price = std::stoi(buy["price"]);
+
+					allUsers[sell["user"]].Stocks[sell["security"]] -= Quantity;
+					allUsers[buy["user"]].Money -= Price;
+					allUsers[buy["user"]].Stocks[buy["security"]] += Quantity;
+					allUsers[sell["user"]].Money += Price;
+				}
+				
+				// Push back the order that is partially fulfilled.
+				double Remainder = std::stoi(buy["quantity"]) - std::stoi(sell["quantity"]);
+				buy["quantity"] = std::to_string(Remainder);
+				orderFlow.Sell.push_back(sell);
+
+				updatePriceAndVolume(sell);
+			}
+
+			saveTransaction(transaction);
+
+			return;
 		}
 	}
 }
 
-void marketMaker::saveTransaction(pairOrders transaction){
-	// Create a completed transaction in a separate file
-	// that takes the place of a block. This transaction should be 
-	// signed by with the account's public keys. It should also
-	// have an identity hash.
+void marketMaker::saveTransaction(pairOrder transaction){
 
+	// Save transaction on block.	
+	// Implement later.
+	return;
 
 }
 
@@ -103,17 +138,22 @@ bool marketMaker::transactionIntegrity(dict sell, dict buy){
 	// * Buyer must have enough money in acc, seller must have security.
 	// * Money or security should be in the order
 
+	return true;
 }
 
-void marketMaker::updatePriceAndVolume(std::string security){
+void marketMaker::updatePriceAndVolume(dict order){
 	// * Access the security in the securities.h file
 	// * Update price.
 	// * Update volume.
-
+	
+	double orderVolume = std::stoi(order["quantity"]);
+	double orderPrice = std::stoi(order["price"]);
+	// Get security.
+	return;
 }
 
 
 void marketMaker::updateOrderFlow(){
 
-	orderFlow = retrieveOrders();
+	orderFlow = Database.retrieveOrders();
 }

@@ -20,12 +20,10 @@ _Indeed, it is becoming ever more obvious that it is not famine, not earthquakes
 -Carl Jung
 
 
-&nbsp;
 
 _...the totalitarian systems of the 20th century represent a kind of collective psychosis. Weather gradually or suddenly, reason and common human decency are no longer possible in such a system: there is only a pervasive atmosphere of terror, and a projection of "the enemy", imagined to be "in our midst". Thus society turns on itself urged on by the ruling authorities_        
 -Joost Meerloo
 
-&nbsp;
 
 _Crimes the individual alone could never stand are freely committed by the group_.       
 -Carl Jung

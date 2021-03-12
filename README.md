@@ -1,5 +1,5 @@
-## Decentralized Idea Market
-Blockchain based idea market.
+## Decentralized Idea and Prediction Market
+
 
 &nbsp;
 &nbsp;

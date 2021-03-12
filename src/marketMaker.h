@@ -1,6 +1,4 @@
 #include "database.h"
-#include "./data/securities.h"
-#include "./data/users.h"
 
 /* 
 
@@ -40,8 +38,8 @@ class marketMaker{
 
 	public:
 		// handle transactions
-		marketMaker();
-	
+		marketMaker() = default;
+		void Start();
 	private:
 
 		Database Database;

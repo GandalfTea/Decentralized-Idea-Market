@@ -3,7 +3,64 @@
 #include <fstream>
 #include <iostream>
 
+#include <chrono>
+#include <ctime>
+
+
+// Version of Database
 const double Database::Version = 0.1;
+
+
+void Database::createOrder( std::string userAddress,
+		  std::string Security,
+		  std::string Price,
+		  std::string Quantity,
+		  std::string orderType,
+		  std::string Expiration,
+		  std::string Execution ) {
+
+	/*
+	   ORDERS SHOULD CONTAIN:
+	 
+	 * ID (automatic)
+	 * ADDRESS of user: Public key. (automatic (not yet))
+	 * TIMESTAMP of creation (automatic)
+	 * SECURITY to exchange.
+	 * PRICE of transaction. (empty in case of instant best price)
+	 * QUANTITY of transaction (Volume)
+	 * TYPE: 1 is buy, 0 is sell.
+	 * EXPIRATION date: only Day.
+	 * EXECUTION type: Immediate, TBD. 
+	 * ? MONEY or SECURITY locked. 
+	 
+	 */
+
+	// Get live time
+	//auto time = std::chrono::system_clock::now();
+	//std::time_t Time = std::chrono::system_clock::to_time_t(time);
+	//std::string timeStamp = std::to_string(std::ctime(&Time));
+
+	std::string timeStamp = "it does not fucking work. You get this instead: 8==D.";
+
+	dict order;
+	order["ID"] = orderID++;
+	order["user"] = userAddress;
+	order["time"] = timeStamp;
+	order["security"] = Security;
+	order["price"] = Price;
+	order["quantity"] = Quantity;
+	order["type"] = orderType;
+
+	if(order["type"] == "1"){
+		orderFlow.Buy.push_back(order);
+
+	}else if (order["type"] == "0"){
+		orderFlow.Sell.push_back(order);
+	}
+
+	return;
+}
+
 
 void Database::updateOrders(std::vector<dict> newOrders) {
 
@@ -26,87 +83,7 @@ void Database::updateOrders(std::vector<dict> newOrders) {
 }
 
 
-// RETURN : Vector argument, updated.
-Flow Database::retrieveOrders() {
-
-	std::ifstream orders("orders.txt");
-
-	std::string delimeter = ":";
-	bool inOrder = false;		// keep track of position
-	bool alreadyExists = false;	// if order already indexed
-	dict newOrder;			// order to write and push
-
-	std::string s;			// write the current string to it
-	size_t a;			
-	
-	while(getline(orders, s)){
-	
-		static size_t index = 0;
-
-		// Orders are 10 lines long.
-		if(index % 10 == 0) {
-			
-			inOrder = true;
-
-			// Get ID line and check if already indexed.
-			std::string ID = s.substr(s.find(delimeter)+1);
-			for(auto order : orderFlow.Buy) {
-				if(order["ID"] == ID){
-					alreadyExists = true;
-					break;
-			}
-			if(!alreadyExists) {
-				for(auto order : orderFlow.Sell) {
-					if(order["ID"] == ID){
-						alreadyExists = true;
-						break;
-				}
-			}
-		}
-		
-		if(alreadyExists){
-			inOrder = false;
-			break;
-		}else{
-			// Push the ID in the new dict
-			newOrder["ID"] = ID;
-		}
-
-		// Freeze index value when in order.
-		if(!inOrder){
-			a = index;
-		}
-
-		// Read and index order
-		if(inOrder && !alreadyExists){
-			
-			if(index < a+8){
-				
-				std::string name = s.substr(0,s.find(delimeter));
-				std::string value = s.substr(s.find(delimeter)+1);
-
-				newOrder[name] = value;
-			}
-			
-			if(index != 0 && index != 1 && index % 8 == 0){
-				
-				//Sell
-				if(newOrder["type"] == 0){
-					orderFlow.Sell.push_back(newOrder);
-
-				// Buy		
-				}else if(newOrder["type"] == 1){
-					orderFlow.Buy.push_back(newOrder);
-				}
-
-				newOrder.clear();
-
-				alreadyExists = false;
-				inOrder = false;
-			}
-		}
-		++index;
-	}
-	return orderFlow;
+Flow Database::getOrders(){
+	return orderFlow;	
 }
 

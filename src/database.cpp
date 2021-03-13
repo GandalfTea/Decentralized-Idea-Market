@@ -84,6 +84,12 @@ void Database::updateOrders(std::vector<dict> newOrders) {
 
 
 Flow Database::getOrders(){
-	return orderFlow;	
+	Flow temp = orderFlow;
+
+	//temp solution to not repeat orders:
+	orderFlow.Buy.clear();
+	orderFlow.Sell.clear();
+
+	return temp;
 }
 

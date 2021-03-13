@@ -22,19 +22,21 @@ void marketMaker::Start(){
 		std::thread t2(&marketMaker::createTransaction, this);
 		t1.join();
 		t2.join();
-		std::cout << "Another one." << std::endl;
+		std::cout << "." << std::endl;
 	}
 }
 
 
 void marketMaker::searchTransaction(){
 	if(marketMaker::orderFlow.Buy.size() != 0 && marketMaker::orderFlow.Sell.size() != 0) {
-		std::cout << "Searched commenced" << std::endl;
 		for(size_t i = 0; i < marketMaker::orderFlow.Buy.size(); i++){
 			for(size_t j = 0; j < marketMaker::orderFlow.Sell.size(); j ++){
 				if(std::stoi(marketMaker::orderFlow.Buy[i]["price"]) == std::stoi(marketMaker::orderFlow.Sell[j]["price"])){
-					pairOrder order{marketMaker::orderFlow.Buy[i], marketMaker::orderFlow.Sell[j],i, j};
+					pairOrder order{marketMaker::orderFlow.Buy[i], marketMaker::orderFlow.Sell[j]};
 					marketMaker::buffer.push_back(order);
+
+					marketMaker::orderFlow.Buy.erase(marketMaker::orderFlow.Buy.begin() + i);
+					marketMaker::orderFlow.Sell.erase(marketMaker::orderFlow.Sell.begin() + j);
 				}
 			}
 		}
@@ -55,21 +57,17 @@ void marketMaker::createTransaction(){
 	 */
 
 	// Debug	
-	if(buffer.size() == 0) { std::cout << "'noting here chief." << std::endl;}
 
-	for(size_t i = 0; i < buffer.size(); i++){
+	for(size_t i = 0; i < buffer.size();){
 
 		if(transactionIntegrity(buffer[i].Sell, buffer[i].Buy)){
-			std::cout << "Transaction commenced." << std::endl;
+			std::cout << "Transaction process started." << std::endl;
 
 			// Remove the orders from orderFlow and buffer
 			dict sell = buffer[i].Sell;
 			dict buy = buffer[i].Buy;
 
-			orderFlow.Buy.erase(orderFlow.Buy.begin() + buffer[i].indexBuy);
-			orderFlow.Sell.erase(orderFlow.Sell.begin() + buffer[i].indexSell);
-
-			buffer.erase(buffer.begin() + i);
+			marketMaker::buffer.erase(buffer.begin());
 
 			// Full Order Fulfillment
 			if (sell["quantity"] == buy["quantity"]){

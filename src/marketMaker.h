@@ -30,8 +30,6 @@
 struct pairOrder {
 	dict Buy;
 	dict Sell;
-	const size_t indexBuy;
-	const size_t indexSell;
 };
 
 class marketMaker{
